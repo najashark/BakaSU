@@ -286,12 +286,15 @@ jobs:
             echo "SIGN_KEYSTORE_PASSWORD=$PROD_KEYSTORE_PASSWORD" >> $GITHUB_ENV
             echo "SIGN_KEY_PASSWORD=$PROD_KEY_PASSWORD" >> $GITHUB_ENV
           else
-            test -n "$PR_KEYSTORE"
-            echo "$PR_KEYSTORE" | base64 -d > pr-key.jks
+            keytool -genkeypair -v \
+              -keystore pr-key.jks \
+              -storepass android -keypass android \
+              -alias pr-key -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US" >/dev/null 2>&1
             echo "SIGN_KEYSTORE_FILE=pr-key.jks" >> $GITHUB_ENV
             echo "SIGN_KEY_ALIAS=pr-key" >> $GITHUB_ENV
-            echo "SIGN_KEYSTORE_PASSWORD=$PR_KEYSTORE_PASSWORD" >> $GITHUB_ENV
-            echo "SIGN_KEY_PASSWORD=$PR_KEY_PASSWORD" >> $GITHUB_ENV
+            echo "SIGN_KEYSTORE_PASSWORD=android" >> $GITHUB_ENV
+            echo "SIGN_KEY_PASSWORD=android" >> $GITHUB_ENV
           fi
 
       - name: Repack and resign
