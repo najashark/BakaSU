@@ -166,6 +166,9 @@ jobs:
       - name: Build APK
         run: |
           export BUILD_EXTRA_ARGS=""
+          export MANAGER_VERSION_CODE=35285
+          export KSU_PACKAGE_NAME="qhvxmr.ztwdbp.klsnfu"
+          export BUILD_EXTRA_ARGS="-PKSU_PACKAGE_NAME=$KSU_PACKAGE_NAME -PIS_SPOOFED_BUILD=true"
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             export KSU_PACKAGE_NAME="com.resukisu.resukisu.pr${{github.event.pull_request.number}}"
             export BUILD_EXTRA_ARGS="-PKSU_PACKAGE_NAME=$KSU_PACKAGE_NAME"
